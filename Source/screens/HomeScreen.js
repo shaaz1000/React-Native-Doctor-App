@@ -1,13 +1,8 @@
 import React,{useState} from "react";
-import { SafeAreaView,Text,StyleSheet,View, TextInput,Image, FlatList,ScrollView, TouchableOpacity} from "react-native"
+import { SafeAreaView,Text,StyleSheet,View, TextInput,Image,Linking,ScrollView, TouchableOpacity} from "react-native"
 import {widthPercentageToDP as wp , heightPercentageToDP as hp} from "react-native-responsive-screen"
 import {IconButton,Divider} from "react-native-paper"
-
-
-    
-
-               
-
+import GlobalStyles from "../global/globalStyle"
 const HomeScreen = ({navigation}) => {
     const [PlaceholderText,setText] = useState("")
     const [isFocus,setIsFocus] = useState(false)
@@ -48,9 +43,14 @@ const HomeScreen = ({navigation}) => {
             imageLink:"https://thumbs.dreamstime.com/b/nurse-doctor-woman-super-hero-medical-concept-female-healthcare-professional-as-superhero-flying-air-wearing-face-182234696.jpg"
         },
     ]
+    const openMessage = () => {
+        //console.log("hello")
+        //Platform.OS === "ios" ? Linking.openURL("telprompt:9619537704") : Linking.openURL("tel:9619537704")
+        Linking.openURL(`sms:&addresses=null&body=I want to book an appointment for tomorrow doctor`)
+    }
     return(
         <>
-        <SafeAreaView style={styles.mainContainer}>
+        <SafeAreaView style={GlobalStyles.mainContainer}>
             <ScrollView showsVerticalScrollIndicator={false}>
             <Text style={styles.helloText}>Hello</Text>
             <View style={styles.greetingContainer}>
@@ -138,7 +138,7 @@ const HomeScreen = ({navigation}) => {
                                 <View style={{flexDirection:"row"}}>
                                     <View>
                                         <Image
-                                            source={{uri:item.imageLink}}
+                                            source={require("../assets/images/MaleDoctor.jpg")}
                                             style={styles.DoctorListImage}
                                         />
                                     </View>
@@ -147,7 +147,7 @@ const HomeScreen = ({navigation}) => {
                                         <Text style={[styles.DoctorNameStyle,{color:"grey",fontWeight:"400",marginTop:hp("0.3%")}]}>{item.Speciality}</Text>
                                         {
                                             item.Rating === 4 ?
-                                            <View style={{flexDirection:"row"}}>
+                                            <View style={{flexDirection:"row",marginTop:hp("0.5%")}}>
                                                 <Image source={require("../assets/images/star.png")} style={styles.startRating}/> 
                                                 <Image source={require("../assets/images/star.png")} style={styles.startRating}/> 
                                                 <Image source={require("../assets/images/star.png")} style={styles.startRating}/> 
@@ -155,13 +155,13 @@ const HomeScreen = ({navigation}) => {
                                             </View>
                                             :
                                             item.Rating === 3 ?
-                                            <View style={{flexDirection:"row"}}>
+                                            <View style={{flexDirection:"row",marginTop:hp("0.5%")}}>
                                                 <Image source={require("../assets/images/star.png")} style={styles.startRating}/>
                                                 <Image source={require("../assets/images/star.png")} style={styles.startRating}/>
                                                 <Image source={require("../assets/images/star.png")} style={styles.startRating}/>
                                             </View>
                                             :
-                                            <View style={{flexDirection:"row"}}>
+                                            <View style={{flexDirection:"row",marginTop:hp("0.5%")}}>
                                                 <Image source={require("../assets/images/star.png")} style={styles.startRating}/>
                                                 <Image source={require("../assets/images/star.png")} style={styles.startRating}/>
                                                 <Image source={require("../assets/images/star.png")} style={styles.startRating}/>
@@ -169,7 +169,12 @@ const HomeScreen = ({navigation}) => {
                                                 <Image source={require("../assets/images/star.png")} style={styles.startRating}/>
                                             </View>
                                         }
-                                        
+                                        <TouchableOpacity 
+                                            style={styles.callDoctor}
+                                            onPress={openMessage}
+                                        >
+                                            <Text>Call Now</Text>
+                                        </TouchableOpacity>
                                     </View>
                                 </View>
                             </View>
@@ -187,10 +192,7 @@ const HomeScreen = ({navigation}) => {
 }
 
 const styles = StyleSheet.create({
-    mainContainer:{
-        flex: 1,
-        backgroundColor:"#ffffff"
-    },
+    
     greetingContainer:{
         flexDirection:"row",
         justifyContent:"space-between"
@@ -208,7 +210,7 @@ const styles = StyleSheet.create({
     },
     searchBarContainer:{
         marginHorizontal:wp("8%"),
-        marginVertical:hp("3%"),
+        marginVertical:hp("1%"),
         backgroundColor:"#f0efeb",
         elevation:10,
         borderRadius:10
@@ -256,11 +258,11 @@ const styles = StyleSheet.create({
         marginVertical:hp("1%")
     },
     viewAllText:{
-        marginRight:wp("2%"),
+        marginRight:wp("4%"),
         fontSize:hp("1.5%"),
-        fontWeight:"bold",
+        fontWeight:"700",
         marginTop:hp("1%"),
-        color:"#7f4f24",
+        color:"#073b4c",
         textDecorationLine:"underline"
     },
     doctorNameList:{
@@ -287,11 +289,37 @@ const styles = StyleSheet.create({
         fontWeight:"bold",
         fontSize:hp("1.4%"),
         marginTop:hp("1.5%"),
-        color:"black"
+        color:"#1d3557"
     },
     startRating:{
         height : 10,
         width : 10
+    },
+    callDoctor:{
+        marginTop:hp("1%"),
+        marginHorizontal:wp("1%"),
+        borderRadius:hp("0.8%"),
+        padding:hp("0.5%"),
+        borderColor:"#1d3557",
+        borderWidth:2,
+        width:wp("18%"),
+        height:hp("3.3%"),
+        shadowOffset:{
+            height:5,
+            width:0
+        },
+        backgroundColor:"white",
+        shadowColor:"#1d3557",
+        shadowOpacity:0.5,
+        shadowRadius:0.5
+    },
+    callNowText:{
+        fontSize:hp("1.8%"),
+        alignSelf:"center",
+        textAlign:"center",
+        padding:hp("0.5%"),
+        color:"#264653",
+        fontWeight:"600"
     }
 })
 

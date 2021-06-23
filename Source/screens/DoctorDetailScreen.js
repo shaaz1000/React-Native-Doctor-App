@@ -1,5 +1,5 @@
 import React from 'react';
-import {Text,SafeAreaView,StyleSheet,View,TouchableOpacity,Image,ScrollView,Platform,Linking} from "react-native"
+import {Text,SafeAreaView,StyleSheet,View,TouchableOpacity,Image,ScrollView,Platform,Linking,Animated} from "react-native"
 import { heightPercentageToDP as hp , widthPercentageToDP as wp} from 'react-native-responsive-screen';
 import moment from 'moment'
 const DoctorDetailScreen = ({navigation,route}) => {
@@ -12,10 +12,18 @@ const DoctorDetailScreen = ({navigation,route}) => {
     const fifthDay = moment().add(4,"days").format("DD-MM")
 
     const openDial = () => {
-        console.log("hello")
-        //Platform.OS === "ios" ? Linking.openURL("telprompt:9619537704") : Linking.openURL("tel:9619537704")
-        Linking.openURL(`sms:&addresses=+919619537704&body=I want to book an appointment for tomorrow doctor`)
+        //console.log("hello")
+        Platform.OS === "ios" ? Linking.openURL("telprompt:9619537704") : Linking.openURL("tel:9619537704")
+        //Linking.openURL(`sms:&addresses=+919619537704&body=I want to book an appointment for tomorrow doctor`)
     }
+
+    const Position = new Animated.ValueXY({x:300,y:0})
+
+    Animated.timing(Position,{
+        toValue:{x:-20,y:0},
+        duration:1500,
+        useNativeDriver:true
+    }).start()
     return(
         <>
         <SafeAreaView style={styles.mainContainer}>
@@ -54,10 +62,15 @@ const DoctorDetailScreen = ({navigation,route}) => {
                     <Text style={styles.CallTextStyle}>Call Doctor</Text>
                 </TouchableOpacity>
             </View>
-            <Image
-                source={{uri:"https://i.pinimg.com/originals/2a/0e/8c/2a0e8cb609405d9ca87bc81154b9c443.jpg"}}
-                style={styles.DoctorImage}
-            />
+            <Animated.View style={{transform:[
+                {translateX:Position.x},
+                {translateY:Position.y}
+            ]}}>
+                <Image
+                    source={{uri:"https://i.pinimg.com/originals/2a/0e/8c/2a0e8cb609405d9ca87bc81154b9c443.jpg"}}
+                    style={styles.DoctorImage}
+                />
+            </Animated.View>
         </View>
         <View style={styles.DoctorBioContainer}>
             <Text style={styles.biographyHeader}>Biography</Text>
@@ -154,7 +167,8 @@ const styles = StyleSheet.create({
         marginLeft:wp("10%"),
         height:hp("40%"),
         width:wp("50%"),
-        bottom:hp("6%")
+        bottom:hp("6%"),
+        
     },
     DoctorBioContainer:{
         marginVertical:hp("1%"),
